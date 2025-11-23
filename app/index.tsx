@@ -1,70 +1,31 @@
-import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
-import React, { useEffect } from "react";
-import {
-    Dimensions,
-    SafeAreaView,
-    StatusBar,
-    Text,
-    View
-} from "react-native";
-import Animated, {
-    useAnimatedStyle,
-    useSharedValue,
-    withSpring,
-    withTiming,
-} from "react-native-reanimated";
-import { NeumorphicButton } from "../components/NeumorphicButton";
-import { NeumorphicView } from "../components/NeumorphicView";
+import React from "react";
+import { StatusBar, Text, TouchableOpacity, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
-const { width } = Dimensions.get('window');
-
+// Minimal start screen; manual navigation only (no auto redirect).
 export default function StartScreen() {
   const router = useRouter();
-  const opacity = useSharedValue(0);
-  const scale = useSharedValue(0.9);
 
-  useEffect(() => {
-    opacity.value = withTiming(1, { duration: 1000 });
-    scale.value = withSpring(1);
-  }, []);
-
-  const animatedStyle = useAnimatedStyle(() => {
-    return {
-      opacity: opacity.value,
-      transform: [{ scale: scale.value }],
-    };
-  });
+  // Removed auto redirect per user request.
 
   return (
-    <SafeAreaView className="flex-1 bg-neu-bg items-center justify-center">
-      <StatusBar barStyle="dark-content" backgroundColor="#E0E5EC" />
-      
-      <Animated.View style={[animatedStyle, { width: '100%', alignItems: 'center' }]}>
-        
-        {/* Main Icon / Logo Area */}
-        <NeumorphicView className="w-48 h-48 items-center justify-center rounded-full mb-12">
-            <Ionicons name="airplane" size={80} color="#4A4A4A" />
-        </NeumorphicView>
-
-        {/* Title */}
-        <View className="mb-16 items-center">
-            <Text className="text-neu-dark-gray text-4xl font-bold mb-2 tracking-wider">
-                AIRPORT
-            </Text>
-            <Text className="text-neu-gray text-xl tracking-widest uppercase">
-                Navigator
-            </Text>
-        </View>
-
-        {/* Get Started Button */}
-        <NeumorphicButton 
-            onPress={() => router.push("/navigation-home")}
-            className="w-64"
-            label="GET STARTED"
-        />
-
-      </Animated.View>
+    <SafeAreaView className="flex-1 bg-white items-center justify-center">
+      <StatusBar barStyle="dark-content" />
+      <View className="items-center mb-10">
+        <Text className="text-4xl font-bold text-primary mb-2">Airport</Text>
+        <Text className="text-2xl font-semibold text-gray-700">Navigator</Text>
+      </View>
+      <Text className="text-gray-500 text-center px-10 mb-8">
+        Smart, fast wayfinding inside the terminal. Let’s go.
+      </Text>
+      <TouchableOpacity
+        onPress={() => router.push("/(tabs)/dashboard")}
+        className="bg-primary px-8 py-4 rounded-xl shadow-lg"
+        activeOpacity={0.85}
+      >
+        <Text className="text-white font-bold tracking-wide">GET STARTED</Text>
+      </TouchableOpacity>
     </SafeAreaView>
   );
 }

@@ -1,16 +1,18 @@
 import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
-  Dimensions,
-  SafeAreaView,
-  StatusBar,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View
+    Dimensions,
+    ImageBackground,
+    SafeAreaView,
+    StatusBar,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    View
 } from "react-native";
+import Logger from "../../services/Logger";
 
 const { width } = Dimensions.get("window");
 
@@ -18,48 +20,56 @@ export default function DashboardScreen() {
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
 
+  useEffect(() => {
+    Logger.info("DashboardScreen mounted");
+  }, []);
+
   return (
     <View className="flex-1 bg-off-white">
       <StatusBar barStyle="light-content" backgroundColor="transparent" translucent />
 
       {/* Hero Section */}
       <View className="h-[45%] relative">
-        <LinearGradient
-            colors={['#005B8F', '#003355']}
+        <ImageBackground
+            source={{ uri: "https://images.unsplash.com/photo-1569154941061-e231b4725ef1?q=80&w=2070&auto=format&fit=crop" }}
             className="absolute inset-0"
-        />
-        {/* Placeholder for Real Image - User can replace this View with an ImageBackground */}
-        <View className="absolute inset-0 opacity-30 bg-black" />
-        
-        <SafeAreaView className="flex-1 px-6 pt-12 justify-between pb-12">
-            <View>
-                <View className="flex-row justify-between items-center mb-8">
-                    <View>
-                        <Text className="text-white/80 text-lg font-medium">Welcome back,</Text>
-                        <Text className="text-white text-3xl font-bold">Traveler</Text>
+            resizeMode="cover"
+        >
+            <LinearGradient
+                colors={['rgba(0,91,143,0.6)', 'rgba(0,51,85,0.9)']}
+                className="absolute inset-0"
+            />
+            
+            <SafeAreaView className="flex-1 px-6 pt-12 justify-between pb-12">
+                <View>
+                    <View className="flex-row justify-between items-center mb-8">
+                        <View>
+                            <Text className="text-white/80 text-lg font-medium">Welcome back,</Text>
+                            <Text className="text-white text-3xl font-bold">Traveler</Text>
+                        </View>
+                        <TouchableOpacity className="w-10 h-10 rounded-full bg-white/20 items-center justify-center border border-white/30">
+                            <Ionicons name="notifications-outline" size={20} color="#FFF" />
+                        </TouchableOpacity>
                     </View>
-                    <TouchableOpacity className="w-10 h-10 rounded-full bg-white/20 items-center justify-center border border-white/30">
-                        <Ionicons name="notifications-outline" size={20} color="#FFF" />
-                    </TouchableOpacity>
+
+                    <Text className="text-white text-4xl font-bold leading-tight mb-2">
+                        Where to next?
+                    </Text>
                 </View>
 
-                <Text className="text-white text-4xl font-bold leading-tight mb-2">
-                    Where to next?
-                </Text>
-            </View>
-
-            {/* Search Bar */}
-            <View className="bg-white rounded-2xl flex-row items-center px-4 h-14 shadow-lg">
-                <Ionicons name="search" size={24} color="#005B8F" />
-                <TextInput 
-                    className="flex-1 ml-3 text-lg text-dark-text"
-                    placeholder="Find gates, food, shops..."
-                    placeholderTextColor="#6C757D"
-                    value={searchQuery}
-                    onChangeText={setSearchQuery}
-                />
-            </View>
-        </SafeAreaView>
+                {/* Search Bar */}
+                <View className="bg-white rounded-2xl flex-row items-center px-4 h-14 shadow-lg">
+                    <Ionicons name="search" size={24} color="#005B8F" />
+                    <TextInput 
+                        className="flex-1 ml-3 text-lg text-dark-text"
+                        placeholder="Find gates, food, shops..."
+                        placeholderTextColor="#6C757D"
+                        value={searchQuery}
+                        onChangeText={setSearchQuery}
+                    />
+                </View>
+            </SafeAreaView>
+        </ImageBackground>
       </View>
 
       {/* Quick Actions */}

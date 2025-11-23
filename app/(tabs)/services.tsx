@@ -2,14 +2,14 @@ import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import {
-    Dimensions,
-    SafeAreaView,
-    ScrollView,
-    StatusBar,
-    Text,
-    TouchableOpacity,
-    View
+  Dimensions,
+  ScrollView,
+  StatusBar,
+  Text,
+  TouchableOpacity,
+  View,
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { CATEGORIES, PLACES } from "../../data/places";
 
 const { width } = Dimensions.get("window");
@@ -46,9 +46,14 @@ export default function ServicesScreen() {
             {CATEGORIES.map((category) => (
               <TouchableOpacity
                 key={category.id}
-                onPress={() => setActiveCategory(category.name === "All" ? "all" : category.name)}
+                onPress={() =>
+                  setActiveCategory(
+                    category.name === "All" ? "all" : category.name
+                  )
+                }
                 className={`mr-4 px-6 py-3 rounded-full border ${
-                  (activeCategory === "all" && category.name === "All") || activeCategory === category.name
+                  (activeCategory === "all" && category.name === "All") ||
+                  activeCategory === category.name
                     ? "bg-primary border-primary"
                     : "bg-white border-gray-200"
                 }`}
@@ -57,11 +62,17 @@ export default function ServicesScreen() {
                   <Ionicons
                     name={category.icon as any}
                     size={20}
-                    color={(activeCategory === "all" && category.name === "All") || activeCategory === category.name ? "#FFF" : "#6C757D"}
+                    color={
+                      (activeCategory === "all" && category.name === "All") ||
+                      activeCategory === category.name
+                        ? "#FFF"
+                        : "#6C757D"
+                    }
                   />
                   <Text
                     className={`ml-2 font-semibold ${
-                        (activeCategory === "all" && category.name === "All") || activeCategory === category.name
+                      (activeCategory === "all" && category.name === "All") ||
+                      activeCategory === category.name
                         ? "text-white"
                         : "text-gray-text"
                     }`}
@@ -79,7 +90,7 @@ export default function ServicesScreen() {
           <Text className="text-dark-text text-xl font-bold mb-4">
             {activeCategory === "all" ? "All Places" : activeCategory}
           </Text>
-          
+
           {filteredPlaces.map((place) => (
             <TouchableOpacity
               key={place.id}
@@ -103,8 +114,10 @@ export default function ServicesScreen() {
                   {place.type} • {place.floor}
                 </Text>
                 <View className="flex-row items-center">
-                    <Ionicons name="walk-outline" size={14} color="#0FA3B1" />
-                    <Text className="text-secondary text-xs font-bold ml-1">{place.distance}m</Text>
+                  <Ionicons name="walk-outline" size={14} color="#0FA3B1" />
+                  <Text className="text-secondary text-xs font-bold ml-1">
+                    {place.distance}m
+                  </Text>
                 </View>
               </View>
               <View className="w-10 h-10 rounded-full bg-off-white items-center justify-center">

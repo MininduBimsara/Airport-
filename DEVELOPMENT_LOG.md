@@ -382,3 +382,20 @@ npm list [package-name]
 
 **Last Updated:** November 21, 2025
 **Status:** Development Environment Stable ✅
+
+---
+
+### UI Redesign & Theme Update
+
+**Date:** November 23, 2025
+
+**Changes:**
+- **Theme Overhaul**: Replaced Red/Black theme with SriLankan Airlines-inspired Ocean Blue palette.
+- **Home Screen**: Redesigned with Navbar, Hero Image, and Feature Cards.
+- **Search**: Implemented Map-based search results with interactive markers.
+- **Navigation**: Added explicit back buttons and improved route visualization.
+- **Assets**: Added generated images for Hero, Search, Navigation, and Services.
+
+**Documentation:**
+- Detailed breakdown available in docs/UI_REDESIGN_2025.md.
+

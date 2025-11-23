@@ -2,13 +2,13 @@ import { Ionicons } from "@expo/vector-icons";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React from "react";
 import {
-    SafeAreaView,
-    ScrollView,
-    StatusBar,
-    Text,
-    TouchableOpacity,
-    View,
+  ScrollView,
+  StatusBar,
+  Text,
+  TouchableOpacity,
+  View,
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { PLACES, getDirections } from "../data/places";
 
 export default function RoutePreviewScreen() {
@@ -102,13 +102,20 @@ export default function RoutePreviewScreen() {
 
       <ScrollView className="flex-1">
         {/* Destination Card */}
-        <View className="mx-4 mt-4 bg-white rounded-2xl p-5 border-2 shadow-lg" style={{ borderColor: typeColor }}>
+        <View
+          className="mx-4 mt-4 bg-white rounded-2xl p-5 border-2 shadow-lg"
+          style={{ borderColor: typeColor }}
+        >
           <View className="flex-row items-start mb-4">
             <View
               className="w-16 h-16 rounded-2xl items-center justify-center mr-4"
               style={{ backgroundColor: `${typeColor}15` }}
             >
-              <Ionicons name={getIcon(place.type)} size={32} color={typeColor} />
+              <Ionicons
+                name={getIcon(place.type)}
+                size={32}
+                color={typeColor}
+              />
             </View>
             <View className="flex-1">
               <Text className="text-2xl font-bold text-gray-900 mb-1">
@@ -118,7 +125,10 @@ export default function RoutePreviewScreen() {
                 className="px-3 py-1 rounded-lg self-start"
                 style={{ backgroundColor: `${typeColor}20` }}
               >
-                <Text className="text-sm font-bold" style={{ color: typeColor }}>
+                <Text
+                  className="text-sm font-bold"
+                  style={{ color: typeColor }}
+                >
                   {place.type}
                 </Text>
               </View>
@@ -196,7 +206,9 @@ export default function RoutePreviewScreen() {
                       className="font-bold"
                       style={{
                         color:
-                          index === directions.length - 1 ? "#ffffff" : typeColor,
+                          index === directions.length - 1
+                            ? "#ffffff"
+                            : typeColor,
                       }}
                     >
                       {index + 1}

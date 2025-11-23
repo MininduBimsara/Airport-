@@ -2,15 +2,20 @@ import { Ionicons } from "@expo/vector-icons";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useEffect, useRef } from "react";
 import {
-    SafeAreaView,
-    ScrollView,
-    StatusBar,
-    Text,
-    TouchableOpacity,
-    View,
+  ScrollView,
+  StatusBar,
+  Text,
+  TouchableOpacity,
+  View,
 } from "react-native";
 import MapView, { Marker, Polyline } from "react-native-maps";
-import { AIRPORT_CENTER, getDirections, getRoutePolyline, PLACES } from "../data/places";
+import { SafeAreaView } from "react-native-safe-area-context";
+import {
+  AIRPORT_CENTER,
+  getDirections,
+  getRoutePolyline,
+  PLACES,
+} from "../data/places";
 
 export default function RouteNavigationScreen() {
   const router = useRouter();
@@ -24,7 +29,10 @@ export default function RouteNavigationScreen() {
       setTimeout(() => {
         mapRef.current?.fitToCoordinates(
           [
-            { latitude: AIRPORT_CENTER.latitude, longitude: AIRPORT_CENTER.longitude },
+            {
+              latitude: AIRPORT_CENTER.latitude,
+              longitude: AIRPORT_CENTER.longitude,
+            },
             place.coordinates,
           ],
           {
@@ -73,22 +81,14 @@ export default function RouteNavigationScreen() {
             lineDashPattern={[1]}
           />
 
-          <Marker
-            coordinate={AIRPORT_CENTER}
-            title="Your Location"
-          >
+          <Marker coordinate={AIRPORT_CENTER} title="Your Location">
             <View className="bg-secondary p-3 rounded-full shadow-lg border-2 border-white">
               <Ionicons name="person" size={20} color="#ffffff" />
             </View>
           </Marker>
 
-          <Marker
-            coordinate={place.coordinates}
-            title={place.name}
-          >
-            <View
-              className="p-3 rounded-full shadow-lg bg-primary border-2 border-white"
-            >
+          <Marker coordinate={place.coordinates} title={place.name}>
+            <View className="p-3 rounded-full shadow-lg bg-primary border-2 border-white">
               <Ionicons name="flag" size={20} color="#ffffff" />
             </View>
           </Marker>
@@ -104,13 +104,13 @@ export default function RouteNavigationScreen() {
 
         {/* Distance Badge */}
         <View className="absolute top-4 right-4 bg-white px-4 py-3 rounded-2xl flex-row items-center shadow-card">
-            <Ionicons name="navigate" size={20} color="#005B8F" />
-            <View className="ml-2">
-                <Text className="text-dark-text font-bold">{place.distance}m</Text>
-                <Text className="text-gray-text text-xs">
-                    ~{Math.ceil((place.distance || 0) / 60)} min
-                </Text>
-            </View>
+          <Ionicons name="navigate" size={20} color="#005B8F" />
+          <View className="ml-2">
+            <Text className="text-dark-text font-bold">{place.distance}m</Text>
+            <Text className="text-gray-text text-xs">
+              ~{Math.ceil((place.distance || 0) / 60)} min
+            </Text>
+          </View>
         </View>
       </View>
 
@@ -132,29 +132,33 @@ export default function RouteNavigationScreen() {
           </View>
 
           <ScrollView className="flex-1 mb-4">
-            <Text className="text-gray-text font-bold mb-3 uppercase tracking-wider text-xs">Directions</Text>
+            <Text className="text-gray-text font-bold mb-3 uppercase tracking-wider text-xs">
+              Directions
+            </Text>
             {directions.map((direction, index) => (
               <View key={index} className="flex-row mb-4">
                 <View className="items-center mr-4">
                   <View
-                    className={`w-8 h-8 rounded-full items-center justify-center border border-gray-200 ${index === 0 ? 'bg-primary' : 'bg-white'}`}
+                    className={`w-8 h-8 rounded-full items-center justify-center border border-gray-200 ${
+                      index === 0 ? "bg-primary" : "bg-white"
+                    }`}
                   >
                     {index === 0 ? (
-                      <Ionicons name="radio-button-on" size={16} color="#ffffff" />
+                      <Ionicons
+                        name="radio-button-on"
+                        size={16}
+                        color="#ffffff"
+                      />
                     ) : index === directions.length - 1 ? (
                       <Ionicons name="flag" size={16} color="#005B8F" />
                     ) : (
-                      <Text
-                        className="font-bold text-xs text-dark-text"
-                      >
+                      <Text className="font-bold text-xs text-dark-text">
                         {index + 1}
                       </Text>
                     )}
                   </View>
                   {index < directions.length - 1 && (
-                    <View
-                      className="w-0.5 flex-1 mt-1 bg-gray-200"
-                    />
+                    <View className="w-0.5 flex-1 mt-1 bg-gray-200" />
                   )}
                 </View>
                 <Text className="flex-1 text-dark-text leading-5 pt-1 font-medium">
@@ -171,11 +175,9 @@ export default function RouteNavigationScreen() {
             >
               <Text className="text-dark-text font-bold">End Trip</Text>
             </TouchableOpacity>
-            <TouchableOpacity
-              className="flex-1 bg-primary py-3 rounded-xl items-center flex-row justify-center"
-            >
-                <Ionicons name="volume-high" size={20} color="#FFF" />
-                <Text className="text-white font-bold ml-2">Voice</Text>
+            <TouchableOpacity className="flex-1 bg-primary py-3 rounded-xl items-center flex-row justify-center">
+              <Ionicons name="volume-high" size={20} color="#FFF" />
+              <Text className="text-white font-bold ml-2">Voice</Text>
             </TouchableOpacity>
           </View>
         </View>

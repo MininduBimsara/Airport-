@@ -2,15 +2,15 @@ import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import React, { useRef, useState } from "react";
 import {
-    SafeAreaView,
-    ScrollView,
-    StatusBar,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View,
+  ScrollView,
+  StatusBar,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from "react-native";
 import MapView, { Marker } from "react-native-maps";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { AIRPORT_CENTER, CATEGORIES, Place, PLACES } from "../data/places";
 
 export default function SearchScreen() {
@@ -147,7 +147,8 @@ export default function SearchScreen() {
         {/* Sort Toggle */}
         <View className="px-4 pt-3 flex-row items-center justify-between">
           <Text className="text-sm text-gray-600">
-            {sortedPlaces.length} {sortedPlaces.length === 1 ? "place" : "places"} found
+            {sortedPlaces.length}{" "}
+            {sortedPlaces.length === 1 ? "place" : "places"} found
           </Text>
           <TouchableOpacity
             onPress={() => setSortByDistance(!sortByDistance)}
