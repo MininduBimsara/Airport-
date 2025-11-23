@@ -39,25 +39,25 @@ const PlaceCard: React.FC<PlaceCardProps> = ({ place, onPress }) => {
   const getTypeColor = (type: string): string => {
     switch (type) {
       case "ATM":
-        return "#04a51b"; // secondary (green)
+        return "#0FA3B1"; // turquoise
       case "Cashier":
-        return "#ef6c1a"; // accent (orange)
+        return "#3BA99C"; // teal green
       case "Help Desk":
-        return "#2a658a"; // navy
+        return "#005B8F"; // primary blue
       case "Gate":
-        return "#dc141b"; // primary (red)
+        return "#66BCE8"; // sky blue
       case "Lounge":
-        return "#4d8e7b"; // teal
+        return "#3BA99C"; // teal green
       case "Restroom":
-        return "#518494"; // cyan
+        return "#0FA3B1"; // turquoise
       case "Shop":
-        return "#ef6c1a"; // accent (orange)
+        return "#66BCE8"; // sky blue
       case "Restaurant":
-        return "#04a51b"; // secondary (green)
+        return "#3BA99C"; // teal green
       case "Medical":
-        return "#dc141b"; // primary (red)
+        return "#3BA99C"; // teal green
       default:
-        return "#2a658a"; // navy
+        return "#005B8F"; // primary blue
     }
   };
 

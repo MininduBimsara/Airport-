@@ -1,8 +1,7 @@
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import {
-    FlatList,
     SafeAreaView,
     ScrollView,
     StatusBar,
@@ -11,11 +10,12 @@ import {
     TouchableOpacity,
     View,
 } from "react-native";
-import PlaceCard from "../components/PlaceCard";
-import { CATEGORIES, Place, PLACES } from "../data/places";
+import MapView, { Marker } from "react-native-maps";
+import { AIRPORT_CENTER, CATEGORIES, Place, PLACES } from "../data/places";
 
 export default function SearchScreen() {
   const router = useRouter();
+  const mapRef = useRef<MapView>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [sortByDistance, setSortByDistance] = useState(false);
@@ -45,29 +45,59 @@ export default function SearchScreen() {
     });
   };
 
+  const getMarkerColor = (type: string): string => {
+    switch (type) {
+      case "ATM":
+        return "#0FA3B1";
+      case "Cashier":
+        return "#3BA99C";
+      case "Help Desk":
+        return "#005B8F";
+      case "Gate":
+        return "#66BCE8";
+      case "Lounge":
+        return "#3BA99C";
+      case "Restroom":
+        return "#0FA3B1";
+      case "Shop":
+        return "#66BCE8";
+      case "Restaurant":
+        return "#3BA99C";
+      case "Medical":
+        return "#3BA99C";
+      default:
+        return "#005B8F";
+    }
+  };
+
   return (
     <SafeAreaView className="flex-1 bg-white">
-      <StatusBar barStyle="dark-content" backgroundColor="#ffffff" />
+      <StatusBar barStyle="light-content" backgroundColor="#005B8F" />
 
       {/* Header */}
-      <View className="px-4 pt-4 pb-3 bg-white border-b border-gray-100">
+      <View className="px-4 pt-4 pb-3 bg-primary border-b border-sky-blue/20">
         <View className="flex-row items-center justify-between mb-3">
-          <View>
-            <Text className="text-3xl font-bold text-gray-900">
-              Search & Navigate
-            </Text>
-            <Text className="text-sm text-gray-500 mt-1">
-              Find your way around BIA
-            </Text>
-          </View>
-          <View className="bg-primary/10 p-3 rounded-full">
-            <Ionicons name="navigate-circle" size={28} color="#dc141b" />
+          <View className="flex-row items-center flex-1">
+            <TouchableOpacity
+              onPress={() => router.back()}
+              className="bg-white/20 p-2 rounded-full mr-3"
+            >
+              <Ionicons name="arrow-back" size={24} color="#ffffff" />
+            </TouchableOpacity>
+            <View className="flex-1">
+              <Text className="text-2xl font-bold text-white">
+                Search & Navigate
+              </Text>
+              <Text className="text-sm text-sky-blue mt-1">
+                Find your way around BIA
+              </Text>
+            </View>
           </View>
         </View>
 
         {/* Search Bar */}
-        <View className="flex-row items-center bg-gray-50 rounded-2xl px-4 py-3 border border-gray-200">
-          <Ionicons name="search-outline" size={20} color="#6b7280" />
+        <View className="flex-row items-center bg-white rounded-2xl px-4 py-3 shadow-lg">
+          <Ionicons name="search-outline" size={20} color="#005B8F" />
           <TextInput
             className="flex-1 ml-3 text-base text-gray-900"
             placeholder="Search ATM, cashier, restroom..."
@@ -93,22 +123,22 @@ export default function SearchScreen() {
         >
           {CATEGORIES.map((category) => (
             <TouchableOpacity
-              key={category}
-              onPress={() => setSelectedCategory(category)}
+              key={category.id}
+              onPress={() => setSelectedCategory(category.name)}
               className={`mr-2 px-4 py-2 rounded-full border ${
-                selectedCategory === category
+                selectedCategory === category.name
                   ? "bg-primary border-primary"
-                  : "bg-white border-gray-300"
+                  : "bg-white border-soft-grey-blue"
               }`}
             >
               <Text
                 className={`text-sm font-semibold ${
-                  selectedCategory === category
+                  selectedCategory === category.name
                     ? "text-white"
                     : "text-gray-700"
                 }`}
               >
-                {category}
+                {category.name}
               </Text>
             </TouchableOpacity>
           ))}
@@ -122,17 +152,17 @@ export default function SearchScreen() {
           <TouchableOpacity
             onPress={() => setSortByDistance(!sortByDistance)}
             className={`flex-row items-center px-3 py-1.5 rounded-lg ${
-              sortByDistance ? "bg-secondary/10" : "bg-gray-100"
+              sortByDistance ? "bg-teal-green/10" : "bg-gray-100"
             }`}
           >
             <Ionicons
               name={sortByDistance ? "checkmark-circle" : "swap-vertical"}
               size={16}
-              color={sortByDistance ? "#04a51b" : "#6b7280"}
+              color={sortByDistance ? "#3BA99C" : "#6b7280"}
             />
             <Text
               className={`text-xs font-semibold ml-1 ${
-                sortByDistance ? "text-secondary" : "text-gray-600"
+                sortByDistance ? "text-teal-green" : "text-gray-600"
               }`}
             >
               Sort by Distance
@@ -141,24 +171,46 @@ export default function SearchScreen() {
         </View>
       </View>
 
-      {/* Results List */}
-      <FlatList
-        data={sortedPlaces}
-        keyExtractor={(item) => item.id.toString()}
-        contentContainerStyle={{ padding: 16 }}
-        renderItem={({ item }) => (
-          <PlaceCard place={item} onPress={() => handlePlacePress(item)} />
-        )}
-        ListEmptyComponent={
-          <View className="items-center justify-center py-20">
+      {/* Map View */}
+      <View className="flex-1">
+        <MapView
+          ref={mapRef}
+          style={{ flex: 1 }}
+          initialRegion={{
+            latitude: AIRPORT_CENTER.latitude,
+            longitude: AIRPORT_CENTER.longitude,
+            latitudeDelta: 0.01,
+            longitudeDelta: 0.01,
+          }}
+          showsUserLocation={true}
+          showsMyLocationButton={false}
+        >
+          {sortedPlaces.map((place) => (
+            <Marker
+              key={place.id}
+              coordinate={place.coordinates}
+              onPress={() => handlePlacePress(place)}
+            >
+              <View
+                className="items-center justify-center p-3 rounded-full shadow-lg"
+                style={{ backgroundColor: getMarkerColor(place.type) }}
+              >
+                <Ionicons name="location" size={24} color="#ffffff" />
+              </View>
+            </Marker>
+          ))}
+        </MapView>
+
+        {sortedPlaces.length === 0 && (
+          <View className="absolute inset-0 items-center justify-center bg-white/80">
             <Ionicons name="search-outline" size={64} color="#d1d5db" />
             <Text className="text-gray-400 text-lg mt-4">No places found</Text>
             <Text className="text-gray-400 text-sm mt-1">
               Try adjusting your search or filters
             </Text>
           </View>
-        }
-      />
+        )}
+      </View>
     </SafeAreaView>
   );
 }

@@ -1,98 +1,108 @@
-import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
+import { Ionicons } from "@expo/vector-icons";
+import { LinearGradient } from "expo-linear-gradient";
+import { useRouter } from "expo-router";
+import React, { useState } from "react";
+import {
+  Dimensions,
+  SafeAreaView,
+  StatusBar,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View
+} from "react-native";
 
-import { HelloWave } from '@/components/hello-wave';
-import ParallaxScrollView from '@/components/parallax-scroll-view';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { Link } from 'expo-router';
+const { width } = Dimensions.get("window");
 
-export default function HomeScreen() {
+export default function DashboardScreen() {
+  const router = useRouter();
+  const [searchQuery, setSearchQuery] = useState("");
+
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12',
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <Link href="/modal">
-          <Link.Trigger>
-            <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-          </Link.Trigger>
-          <Link.Preview />
-          <Link.Menu>
-            <Link.MenuAction title="Action" icon="cube" onPress={() => alert('Action pressed')} />
-            <Link.MenuAction
-              title="Share"
-              icon="square.and.arrow.up"
-              onPress={() => alert('Share pressed')}
-            />
-            <Link.Menu title="More" icon="ellipsis">
-              <Link.MenuAction
-                title="Delete"
-                icon="trash"
-                destructive
-                onPress={() => alert('Delete pressed')}
-              />
-            </Link.Menu>
-          </Link.Menu>
-        </Link>
+    <View className="flex-1 bg-off-white">
+      <StatusBar barStyle="light-content" backgroundColor="transparent" translucent />
 
-        <ThemedText>
-          {`Tap the Explore tab to learn more about what's included in this starter app.`}
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          {`When you're ready, run `}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+      {/* Hero Section */}
+      <View className="h-[45%] relative">
+        <LinearGradient
+            colors={['#005B8F', '#003355']}
+            className="absolute inset-0"
+        />
+        {/* Placeholder for Real Image - User can replace this View with an ImageBackground */}
+        <View className="absolute inset-0 opacity-30 bg-black" />
+        
+        <SafeAreaView className="flex-1 px-6 pt-12 justify-between pb-12">
+            <View>
+                <View className="flex-row justify-between items-center mb-8">
+                    <View>
+                        <Text className="text-white/80 text-lg font-medium">Welcome back,</Text>
+                        <Text className="text-white text-3xl font-bold">Traveler</Text>
+                    </View>
+                    <TouchableOpacity className="w-10 h-10 rounded-full bg-white/20 items-center justify-center border border-white/30">
+                        <Ionicons name="notifications-outline" size={20} color="#FFF" />
+                    </TouchableOpacity>
+                </View>
+
+                <Text className="text-white text-4xl font-bold leading-tight mb-2">
+                    Where to next?
+                </Text>
+            </View>
+
+            {/* Search Bar */}
+            <View className="bg-white rounded-2xl flex-row items-center px-4 h-14 shadow-lg">
+                <Ionicons name="search" size={24} color="#005B8F" />
+                <TextInput 
+                    className="flex-1 ml-3 text-lg text-dark-text"
+                    placeholder="Find gates, food, shops..."
+                    placeholderTextColor="#6C757D"
+                    value={searchQuery}
+                    onChangeText={setSearchQuery}
+                />
+            </View>
+        </SafeAreaView>
+      </View>
+
+      {/* Quick Actions */}
+      <View className="flex-1 px-6 -mt-8">
+        <View className="flex-row justify-between mb-8">
+            {[
+                { icon: "navigate", label: "Navigate", route: "/(tabs)/services" },
+                { icon: "airplane", label: "My Flight", route: "/(tabs)/flights" },
+                { icon: "fast-food", label: "Eat", route: "/(tabs)/services" },
+                { icon: "help-buoy", label: "Help", route: "/(tabs)/services" },
+            ].map((action, index) => (
+                <TouchableOpacity 
+                    key={index}
+                    onPress={() => router.push(action.route as any)}
+                    className="items-center"
+                >
+                    <View className="w-16 h-16 rounded-2xl bg-white items-center justify-center shadow-card mb-2">
+                        <Ionicons name={action.icon as any} size={28} color="#005B8F" />
+                    </View>
+                    <Text className="text-dark-text font-medium text-xs">{action.label}</Text>
+                </TouchableOpacity>
+            ))}
+        </View>
+
+        {/* Featured Card */}
+        <Text className="text-dark-text text-xl font-bold mb-4">Featured</Text>
+        <TouchableOpacity 
+            activeOpacity={0.9}
+            className="bg-white rounded-3xl p-4 shadow-card flex-row items-center"
+            onPress={() => router.push("/(tabs)/services")}
+        >
+            <View className="w-24 h-24 rounded-2xl bg-secondary items-center justify-center mr-4">
+                <Ionicons name="cafe" size={40} color="#FFF" />
+            </View>
+            <View className="flex-1">
+                <View className="bg-accent/20 self-start px-2 py-1 rounded-md mb-2">
+                    <Text className="text-accent text-xs font-bold uppercase">Recommended</Text>
+                </View>
+                <Text className="text-dark-text text-lg font-bold mb-1">Serendib Lounge</Text>
+                <Text className="text-gray-text text-sm">Relax before your flight with premium amenities.</Text>
+            </View>
+        </TouchableOpacity>
+      </View>
+    </View>
   );
 }
-
-const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
-  },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
-  },
-});

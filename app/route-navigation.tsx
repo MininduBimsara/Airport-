@@ -38,8 +38,8 @@ export default function RouteNavigationScreen() {
 
   if (!place) {
     return (
-      <SafeAreaView className="flex-1 bg-white items-center justify-center">
-        <Text className="text-gray-500">Place not found</Text>
+      <SafeAreaView className="flex-1 bg-off-white items-center justify-center">
+        <Text className="text-gray-text">Place not found</Text>
       </SafeAreaView>
     );
   }
@@ -47,38 +47,11 @@ export default function RouteNavigationScreen() {
   const routePolyline = getRoutePolyline(place);
   const directions = getDirections(place);
 
-  const getTypeColor = (type: string): string => {
-    switch (type) {
-      case "ATM":
-        return "#518494";
-      case "Cashier":
-        return "#4d8e7b";
-      case "Help Desk":
-        return "#2a658a";
-      case "Gate":
-        return "#518494";
-      case "Lounge":
-        return "#4d8e7b";
-      case "Restroom":
-        return "#2a658a";
-      case "Shop":
-        return "#518494";
-      case "Restaurant":
-        return "#4d8e7b";
-      case "Medical":
-        return "#04a51b";
-      default:
-        return "#2a658a";
-    }
-  };
-
-  const typeColor = getTypeColor(place.type);
-
   return (
-    <SafeAreaView className="flex-1 bg-white">
-      <StatusBar barStyle="dark-content" backgroundColor="#ffffff" />
+    <SafeAreaView className="flex-1 bg-off-white">
+      <StatusBar barStyle="dark-content" backgroundColor="#F8F9FA" />
 
-      <View className="flex-1">
+      <View className="flex-1 relative">
         <MapView
           ref={mapRef}
           style={{ flex: 1 }}
@@ -91,11 +64,12 @@ export default function RouteNavigationScreen() {
           showsUserLocation={true}
           showsMyLocationButton={false}
           mapType="standard"
+          userInterfaceStyle="light"
         >
           <Polyline
             coordinates={routePolyline}
-            strokeColor={typeColor}
-            strokeWidth={4}
+            strokeColor="#005B8F"
+            strokeWidth={5}
             lineDashPattern={[1]}
           />
 
@@ -103,8 +77,8 @@ export default function RouteNavigationScreen() {
             coordinate={AIRPORT_CENTER}
             title="Your Location"
           >
-            <View className="bg-success p-3 rounded-full shadow-lg">
-              <Ionicons name="person" size={24} color="#ffffff" />
+            <View className="bg-secondary p-3 rounded-full shadow-lg border-2 border-white">
+              <Ionicons name="person" size={20} color="#ffffff" />
             </View>
           </Marker>
 
@@ -113,77 +87,65 @@ export default function RouteNavigationScreen() {
             title={place.name}
           >
             <View
-              className="p-3 rounded-full shadow-lg"
-              style={{ backgroundColor: typeColor }}
+              className="p-3 rounded-full shadow-lg bg-primary border-2 border-white"
             >
-              <Ionicons name="flag" size={24} color="#ffffff" />
+              <Ionicons name="flag" size={20} color="#ffffff" />
             </View>
           </Marker>
         </MapView>
 
-        <View className="absolute top-4 left-4">
-          <TouchableOpacity
-            onPress={() => router.back()}
-            className="bg-white p-3 rounded-full shadow-xl"
-          >
-            <Ionicons name="arrow-back" size={24} color="#2a658a" />
-          </TouchableOpacity>
-        </View>
+        {/* Back Button */}
+        <TouchableOpacity
+          onPress={() => router.back()}
+          className="absolute top-4 left-4 w-12 h-12 bg-white rounded-full items-center justify-center shadow-card"
+        >
+          <Ionicons name="arrow-back" size={24} color="#1A1A1A" />
+        </TouchableOpacity>
 
-        <View className="absolute top-4 right-4 bg-white rounded-2xl px-4 py-3 shadow-xl">
-          <View className="flex-row items-center">
-            <Ionicons name="navigate" size={20} color={typeColor} />
-            <Text className="text-gray-900 font-bold ml-2">{place.distance}m</Text>
-          </View>
-          <Text className="text-gray-500 text-xs">
-            ~{Math.ceil((place.distance || 0) / 60)} min walk
-          </Text>
+        {/* Distance Badge */}
+        <View className="absolute top-4 right-4 bg-white px-4 py-3 rounded-2xl flex-row items-center shadow-card">
+            <Ionicons name="navigate" size={20} color="#005B8F" />
+            <View className="ml-2">
+                <Text className="text-dark-text font-bold">{place.distance}m</Text>
+                <Text className="text-gray-text text-xs">
+                    ~{Math.ceil((place.distance || 0) / 60)} min
+                </Text>
+            </View>
         </View>
       </View>
 
-      <View className="bg-white border-t-4 shadow-2xl" style={{ borderTopColor: typeColor }}>
-        <View className="p-4">
-          <View className="flex-row items-center justify-between mb-3">
+      {/* Navigation Steps */}
+      <View className="bg-white border-t border-gray-100 shadow-floating rounded-t-3xl -mt-6 pt-6 h-1/2">
+        <View className="px-6 flex-1">
+          <View className="flex-row items-center justify-between mb-4">
             <View className="flex-row items-center flex-1">
-              <View
-                className="p-2 rounded-lg mr-3"
-                style={{ backgroundColor: `${typeColor}20` }}
-              >
-                <Ionicons name="map" size={24} color={typeColor} />
+              <View className="p-3 rounded-xl mr-4 bg-soft-blue">
+                <Ionicons name="map" size={24} color="#005B8F" />
               </View>
               <View className="flex-1">
-                <Text className="text-gray-900 text-lg font-bold">
+                <Text className="text-dark-text text-lg font-bold">
                   Navigating to {place.name}
                 </Text>
-                <Text className="text-gray-600 text-sm">{place.floor}</Text>
+                <Text className="text-gray-text text-sm">{place.floor}</Text>
               </View>
             </View>
           </View>
 
-          <ScrollView className="max-h-48">
-            <Text className="text-gray-700 font-bold mb-3">Directions:</Text>
+          <ScrollView className="flex-1 mb-4">
+            <Text className="text-gray-text font-bold mb-3 uppercase tracking-wider text-xs">Directions</Text>
             {directions.map((direction, index) => (
-              <View key={index} className="flex-row mb-3">
-                <View className="items-center mr-3">
+              <View key={index} className="flex-row mb-4">
+                <View className="items-center mr-4">
                   <View
-                    className="w-8 h-8 rounded-full items-center justify-center"
-                    style={{
-                      backgroundColor:
-                        index === 0
-                          ? "#04a51b"
-                          : index === directions.length - 1
-                          ? typeColor
-                          : `${typeColor}30`,
-                    }}
+                    className={`w-8 h-8 rounded-full items-center justify-center border border-gray-200 ${index === 0 ? 'bg-primary' : 'bg-white'}`}
                   >
                     {index === 0 ? (
                       <Ionicons name="radio-button-on" size={16} color="#ffffff" />
                     ) : index === directions.length - 1 ? (
-                      <Ionicons name="flag" size={16} color="#ffffff" />
+                      <Ionicons name="flag" size={16} color="#005B8F" />
                     ) : (
                       <Text
-                        className="font-bold text-xs"
-                        style={{ color: typeColor }}
+                        className="font-bold text-xs text-dark-text"
                       >
                         {index + 1}
                       </Text>
@@ -191,33 +153,29 @@ export default function RouteNavigationScreen() {
                   </View>
                   {index < directions.length - 1 && (
                     <View
-                      className="w-0.5 flex-1 mt-1"
-                      style={{ backgroundColor: `${typeColor}30`, height: 20 }}
+                      className="w-0.5 flex-1 mt-1 bg-gray-200"
                     />
                   )}
                 </View>
-                <Text className="flex-1 text-gray-700 leading-5 pt-1">
+                <Text className="flex-1 text-dark-text leading-5 pt-1 font-medium">
                   {direction}
                 </Text>
               </View>
             ))}
           </ScrollView>
 
-          <View className="flex-row mt-4 space-x-3">
+          <View className="flex-row mb-6 space-x-4">
             <TouchableOpacity
               onPress={() => router.back()}
-              className="flex-1 bg-gray-100 rounded-xl py-3 items-center"
+              className="flex-1 bg-off-white py-3 rounded-xl items-center border border-gray-200"
             >
-              <Text className="text-gray-700 font-bold">Cancel</Text>
+              <Text className="text-dark-text font-bold">End Trip</Text>
             </TouchableOpacity>
             <TouchableOpacity
-              className="flex-1 rounded-xl py-3 items-center"
-              style={{ backgroundColor: typeColor }}
+              className="flex-1 bg-primary py-3 rounded-xl items-center flex-row justify-center"
             >
-              <View className="flex-row items-center">
-                <Ionicons name="volume-high" size={20} color="#ffffff" />
-                <Text className="text-white font-bold ml-2">Voice Guide</Text>
-              </View>
+                <Ionicons name="volume-high" size={20} color="#FFF" />
+                <Text className="text-white font-bold ml-2">Voice</Text>
             </TouchableOpacity>
           </View>
         </View>

@@ -156,17 +156,18 @@ export const PLACES: Place[] = [
 ];
 
 export const CATEGORIES = [
-  { id: "all", name: "All", icon: "apps" as const, color: "#2a658a" },
-  { id: "atm", name: "ATM", icon: "cash" as const, color: "#518494" },
-  { id: "cashier", name: "Cashier", icon: "card" as const, color: "#4d8e7b" },
-  { id: "help-desk", name: "Help Desk", icon: "information-circle" as const, color: "#2a658a" },
-  { id: "gate", name: "Gates", icon: "airplane" as const, color: "#518494" },
-  { id: "lounge", name: "Lounges", icon: "bed" as const, color: "#4d8e7b" },
-  { id: "restroom", name: "Restrooms", icon: "man" as const, color: "#2a658a" },
-  { id: "shop", name: "Shops", icon: "cart" as const, color: "#518494" },
-  { id: "restaurant", name: "Restaurants", icon: "restaurant" as const, color: "#4d8e7b" },
-  { id: "medical", name: "Medical", icon: "medical" as const, color: "#04a51b" },
+  { id: "all", name: "All", icon: "apps" as const, color: "#005B8F" },
+  { id: "atm", name: "ATM", icon: "cash" as const, color: "#0FA3B1" },
+  { id: "cashier", name: "Cashier", icon: "card" as const, color: "#3BA99C" },
+  { id: "help-desk", name: "Help Desk", icon: "information-circle" as const, color: "#005B8F" },
+  { id: "gate", name: "Gates", icon: "airplane" as const, color: "#66BCE8" },
+  { id: "lounge", name: "Lounges", icon: "bed" as const, color: "#3BA99C" },
+  { id: "restroom", name: "Restrooms", icon: "man" as const, color: "#0FA3B1" },
+  { id: "shop", name: "Shops", icon: "cart" as const, color: "#66BCE8" },
+  { id: "restaurant", name: "Restaurants", icon: "restaurant" as const, color: "#3BA99C" },
+  { id: "medical", name: "Medical", icon: "medical" as const, color: "#3BA99C" },
 ];
+
 
 // Generate route polyline coordinates from current location to destination
 export const getRoutePolyline = (destination: Place) => {
