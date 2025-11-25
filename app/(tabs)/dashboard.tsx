@@ -5,13 +5,13 @@ import React, { useEffect, useState } from "react";
 import {
     Dimensions,
     ImageBackground,
-    SafeAreaView,
     StatusBar,
     Text,
     TextInput,
     TouchableOpacity,
     View
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import Logger from "../../services/Logger";
 
 const { width } = Dimensions.get("window");

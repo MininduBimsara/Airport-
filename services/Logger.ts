@@ -1,4 +1,4 @@
-import * as FileSystem from 'expo-file-system';
+import * as FileSystem from 'expo-file-system/legacy';
 
 const LOG_FILE_URI = (FileSystem.documentDirectory || '') + 'logs.txt';
 
